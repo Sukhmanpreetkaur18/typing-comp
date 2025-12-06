@@ -31,6 +31,14 @@ const wpmDisplay = document.getElementById('wpmDisplay');
 const accuracyDisplay = document.getElementById('accuracyDisplay');
 const timerDisplay = document.getElementById('timerDisplay');
 const focusWarning = document.getElementById('focusWarning');
+const joinNewCompetitionBtn = document.getElementById('joinNewCompetitionBtn');
+
+// ====== Monkeytype style: click on text to focus hidden input ======
+if (textDisplay && typingInput) {
+  textDisplay.addEventListener('click', () => {
+    typingInput.focus();
+  });
+}
 
 // ============= ANTI-CHEATING =============
 document.addEventListener('contextmenu', (e) => e.preventDefault());
@@ -66,7 +74,7 @@ joinBtn.addEventListener('click', () => {
   socket.emit('join', { code, participantName: name });
 });
 
-// ============= TYPING INPUT HANDLER =============
+// ============= TYPING INPUT HANDLER (Monkeytype style) =============
 typingInput.addEventListener('keydown', (e) => {
   if (!isTestInProgress) return;
 
@@ -87,21 +95,27 @@ typingInput.addEventListener('keydown', (e) => {
     return;
   }
 
-  // Printable character
-  if (e.key.length === 1) {
-    e.preventDefault();
-    const nextIndex = typedChars.length;
-    const expectedChar = typingText[nextIndex] || '';
-    typedChars.push(e.key);
-    typingInput.value = typedChars.join('');
-
-    if (e.key !== expectedChar) {
-      totalErrors++;
-      errorIndices.add(nextIndex);
-    }
-
-    updateTypingStats();
+  // Ignore modifier keys (Shift, Ctrl, Alt, etc.)
+  if (e.key.length !== 1) {
+    return;
   }
+
+  // Printable character
+  e.preventDefault();
+
+  const nextIndex = typedChars.length;
+  const expectedChar = typingText[nextIndex] || '';
+  const typedChar = e.key;
+
+  typedChars.push(typedChar);
+  typingInput.value = typedChars.join('');
+
+  if (typedChar !== expectedChar) {
+    totalErrors++;
+    errorIndices.add(nextIndex);
+  }
+
+  updateTypingStats();
 });
 
 // ============= CORE UPDATE FUNCTION =============
@@ -268,12 +282,8 @@ socket.on('disconnect', () => {
   completionScreen.classList.add('hidden');
 });
 
-
-const joinNewCompetitionBtn = document.getElementById('joinNewCompetitionBtn');
-
 if (joinNewCompetitionBtn) {
   joinNewCompetitionBtn.addEventListener('click', () => {
-
-    window.location.href = '/'; 
+    window.location.href = '/';
   });
 }

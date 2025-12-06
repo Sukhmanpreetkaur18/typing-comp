@@ -2011,3 +2011,53 @@ body {
     gap: var(--space-6);
   }
 }
+
+
+/* Typing input ko Monkeytype jaisa "ghost" banane ke liye */
+#typingInput {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  height: 0;
+  width: 0;
+}
+
+/* Text jo screen pe dikh raha hai (Monkeytype style) */
+#textDisplay {
+  font-size: 1.4rem;          /* chahe to change kar lena */
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  user-select: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Sahi typed characters fade out ho jayein */
+#textDisplay .correct {
+  color: #6b7280;             /* halka grey */
+}
+
+/* Galat characters red highlight */
+#textDisplay .incorrect {
+  background: rgba(239, 68, 68, 0.25);
+  color: #fecaca;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+/* Current character highlight (neeche line) */
+#textDisplay .current {
+  position: relative;
+  color: #e5e7eb;
+}
+
+#textDisplay .current::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  border-radius: 999px;
+  background: #38bdf8;       /* accent color / cursor jaisa */
+}

@@ -1,149 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TechFest Typing - Participant</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TechFest Typing - Participant</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
 
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+        <h1>⚡ TechFest Typing Battle</h1>
+        <span class="role-badge">PARTICIPANT</span>
+      </header>
 
-<body class="dark-theme">
-  <div class="container">
-    <header class="header">
-      <h1>⚡ TechFest Typing Battle</h1>
-      <span class="role-badge">PARTICIPANT</span>
-    </header>
+      <!-- JOIN SCREEN -->
+      <section id="joinScreen" class="center-screen">
+        <div class="join-card">
+          <h2>Join Competition</h2>
+          <form id="joinForm" onsubmit="return false;">
+            <div class="form-group">
+              <label for="competitionCode">Competition Code</label>
+              <input
+                type="text"
+                id="competitionCode"
+                placeholder="Enter 5-letter code"
+                maxlength="5"
+                required
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-group">
+              <label for="participantName">Your Name</label>
+              <input
+                type="text"
+                id="participantName"
+                placeholder="Enter your name"
+                required
+                autocomplete="off"
+              />
+            </div>
+            <button type="button" class="btn-primary" id="joinBtn">
+              Join Competition
+            </button>
+          </form>
+          <div id="joinError" class="error-message"></div>
+        </div>
+      </section>
 
-
-    <!-- JOIN SCREEN -->
-    <section id="joinScreen" class="center-screen">
-      <div class="join-card">
-        <h2>Join Competition</h2>
-        <form id="joinForm" onsubmit="return false;">
-          <div class="form-group">
-            <label for="competitionCode">Competition Code</label>
-            <input type="text" id="competitionCode" placeholder="Enter 5-letter code" maxlength="5" required
-              autocomplete="off" />
+      <!-- LOBBY SCREEN -->
+      <section id="lobbyScreen" class="center-screen hidden">
+        <div class="lobby-card">
+          <h2>Welcome, <span id="welcomeName">Participant</span>!</h2>
+          <p class="competition-name" id="competitionName">Loading...</p>
+          <div class="participants-count">
+            <p>
+              Participants Ready:
+              <strong id="participantCountDisplay">0</strong>
+            </p>
           </div>
-          <div class="form-group">
-            <label for="participantName">Your Name</label>
-            <input type="text" id="participantName" placeholder="Enter your name" required autocomplete="off" />
+          <div class="waiting-animation">
+            <div class="spinner"></div>
           </div>
-          <button type="button" class="btn-primary" id="joinBtn">
-            Join Competition
-          </button>
-        </form>
-        <div id="joinError" class="error-message"></div>
-      </div>
-    </section>
-
-
-    <!-- LOBBY SCREEN -->
-    <section id="lobbyScreen" class="center-screen hidden">
-      <div class="lobby-card">
-        <h2>Welcome, <span id="welcomeName">Participant</span>!</h2>
-        <p class="competition-name" id="competitionName">Loading...</p>
-        <div class="participants-count">
-          <p>
-            Participants Ready:
-            <strong id="participantCountDisplay">0</strong>
+          <p class="waiting-text">
+            ⏳ Waiting for organizer to start Round 1...
           </p>
         </div>
-        <div class="waiting-animation">
-          <div class="spinner"></div>
+      </section>
+
+      <!-- TYPING TEST SCREEN -->
+      <section id="testScreen" class="test-screen-improved hidden">
+        <!-- STATS BAR -->
+        <div class="stats-bar-improved">
+          <div class="stat-box">
+            <span class="stat-label">WPM</span>
+            <span class="stat-value" id="wpmDisplay">0</span>
+          </div>
+
+          <div class="stat-box">
+            <span class="stat-label">Accuracy</span>
+            <span class="stat-value" id="accuracyDisplay">100%</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Time</span>
+            <span class="stat-value" id="timerDisplay">0s</span>
+          </div>
         </div>
-        <p class="waiting-text">
-          ⏳ Waiting for organizer to start Round 1...
-        </p>
-      </div>
-    </section>
 
-
-    <!-- TYPING TEST SCREEN -->
-    <section id="testScreen" class="test-screen-improved hidden">
-      <!-- STATS BAR -->
-      <div class="stats-bar-improved">
-        <div class="stat-box">
-          <span class="stat-label">WPM</span>
-          <span class="stat-value" id="wpmDisplay">0</span>
-        </div>
-
-
-        <div class="stat-box">
-          <span class="stat-label">Accuracy</span>
-          <span class="stat-value" id="accuracyDisplay">100%</span>
-        </div>
-        <div class="stat-box">
-          <span class="stat-label">Time</span>
-          <span class="stat-value" id="timerDisplay">0s</span>
-        </div>
-      </div>
-
-
-      <!-- TYPING AREA - CENTERED AND IMPROVED -->
-      <div class="typing-container-improved">
-        <div class="text-display-improved" id="textDisplay">
+        <!-- TYPING AREA - CENTERED AND IMPROVED -->
+        <div class="typing-container-improved">
+          <!-- <div class="text-display-improved" id="textDisplay">
           <p class="loading-text">Loading text...</p>
+        </div> -->
+          <div id="textDisplay"></div>
+          <input
+            id="typingInput"
+            type="text"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+          />
+          
         </div>
-        <input type="text" id="typingInput" class="typing-input-improved" placeholder="Click here to start typing..."
-          autocomplete="off" spellcheck="false" />
-        <p class="focus-warning hidden" id="focusWarning">
-          ⚠️ Tab switch detected! Return to continue.
-        </p>
-      </div>
-    </section>
+      </section>
 
+      <!-- RESULTS SCREEN -->
+      <section id="resultsScreen" class="center-screen hidden">
+        <div class="results-card">
+          <h2>Round Complete! 🎉</h2>
+          <div class="personal-results">
+            <div class="result-item">
+              <span>Your WPM:</span>
+              <strong id="resultWpm">0</strong>
+            </div>
+            <div class="result-item">
+              <span>Your Accuracy :</span>
+              <strong id="resultAccuracy">0%</strong>
+            </div>
+            <div class="result-item">
+              <span>Your Errors:</span>
+              <strong id="resultErrors">0</strong>
+            </div>
+            <div class="result-item">
+              <span>Your Backspaces:</span>
+              <strong id="resultBackspaces">0</strong>
+            </div>
+          </div>
 
-    <!-- RESULTS SCREEN -->
-    <section id="resultsScreen" class="center-screen hidden">
-      <div class="results-card">
-        <h2>Round Complete! 🎉</h2>
-        <div class="personal-results">
-          <div class="result-item">
-            <span>Your WPM:</span>
-            <strong id="resultWpm">0</strong>
-          </div>
-           <div class="result-item">
-            <span>Your Accuracy :</span>
-            <strong id="resultAccuracy">0%</strong>
-          </div>
-          <div class="result-item">
-            <span>Your Errors:</span>
-            <strong id="resultErrors">0</strong>
-          </div>
-          <div class="result-item">
-            <span>Your Backspaces:</span>
-            <strong id="resultBackspaces">0</strong>
-          </div>
+          <p id="nextRoundText" class="next-round-text">
+            ⏳ Waiting for next round...
+          </p>
         </div>
+      </section>
 
-        <p id="nextRoundText" class="next-round-text">
-          ⏳ Waiting for next round...
-        </p>
-      </div>
-    </section>
+      <!-- COMPLETION SCREEN -->
+      <section id="completionScreen" class="center-screen hidden">
+        <div class="completion-card">
+          <h2 style="text-align: center">Results Saved Successfully!</h2>
+          <p
+            class="completion-message"
+            style="text-align: center; margin-top: 8px"
+          >
+            Results will be announced shortly.
+          </p>
 
+          <button
+            type="button"
+            class="btn-primary"
+            id="joinNewCompetitionBtn"
+            style="margin-top: 20px"
+          >
+            Join New Competition
+          </button>
+        </div>
+      </section>
+    </div>
 
-    <!-- COMPLETION SCREEN -->
-<section id="completionScreen" class="center-screen hidden ">
-  <div class="completion-card">
-    <h2 style="text-align: center;">Results Saved Successfully!</h2>
-    <p class="completion-message" style="text-align: center; margin-top: 8px;">
-      Results will be announced shortly.
-    </p>
-
-    <button type="button" class="btn-primary" id="joinNewCompetitionBtn" style="margin-top: 20px;">
-      Join New Competition
-    </button>
-  </div>
-</section>
-
-  </div>
-
-
-  <script src="https://cdn.socket.io/4.5.4/socket.io.js"></script>
-  <script src="participant-script.js"></script>
-</body>
-
+    <script src="https://cdn.socket.io/4.5.4/socket.io.js"></script>
+    <script src="participant-script.js"></script>
+  </body>
 </html>
