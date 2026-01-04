@@ -8,22 +8,22 @@ A **production-ready, full-stack typing competition platform** built with Node.j
 
 ## 📖 Documentation Structure
 
-This documentation is organized into modular files for better navigation:
+This documentation is organized into modular files for better navigation. See the [docs](./docs/) folder for complete documentation:
 
-- **[FEATURES.md](./FEATURES.md)** - Complete feature list and capabilities
-- **[SETUP.md](./SETUP.md)** - Installation and configuration guide
-- **[QUICKSTART.md](./QUICKSTART.md)** - Quick start guide for organizers and participants
-- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Project structure and tech stack
-- **[CSS_ARCHITECTURE.md](./CSS_ARCHITECTURE.md)** - CSS design system and modular styling
-- **[SOCKET_API.md](./SOCKET_API.md)** - WebSocket events and communication protocol
-- **[DATABASE.md](./DATABASE.md)** - MongoDB schema and data structure
-- **[DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md)** - Color tokens, typography, spacing, animations
-- **[REST_API.md](./REST_API.md)** - REST API endpoints and responses
-- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Deployment guides for Render and Railway
-- **[TESTING.md](./TESTING.md)** - Testing checklist and edge cases
-- **[CONFIG.md](./CONFIG.md)** - Configuration and customization options
-- **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Common issues and solutions
-- **[PERFORMANCE.md](./PERFORMANCE.md)** - Performance metrics and optimization
+- **[FEATURES.md](./docs/FEATURES.md)** - Complete feature list and capabilities
+- **[SETUP.md](./docs/SETUP.md)** - Installation and configuration guide
+- **[QUICKSTART.md](./docs/QUICKSTART.md)** - Quick start guide for organizers and participants
+- **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - Project structure and tech stack
+- **[SOCKET_API.md](./docs/SOCKET_API.md)** - WebSocket events and communication protocol
+- **[DATABASE.md](./docs/DATABASE.md)** - MongoDB schema and data structure
+- **[DESIGN_SYSTEM.md](./docs/DESIGN_SYSTEM.md)** - Color tokens, typography, spacing, animations
+- **[REST_API.md](./docs/REST_API.md)** - REST API endpoints and responses
+- **[DEPLOYMENT.md](./docs/DEPLOYMENT.md)** - Deployment guides for Render and Railway
+- **[TESTING.md](./docs/TESTING.md)** - Testing checklist and edge cases
+- **[CONFIG.md](./docs/CONFIG.md)** - Configuration and customization options
+- **[TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md)** - Common issues and solutions
+- **[PERFORMANCE.md](./docs/PERFORMANCE.md)** - Performance metrics and optimization
+- **[CONTRIBUTING.md](./docs/CONTRIBUTING.md)** - Contribution guidelines
 
 ## 🚀 Quick Start
 
