@@ -429,6 +429,8 @@ exportPdfBtn.addEventListener('click', async () => {
     const element = document.createElement('div');
     element.style.padding = '20px';
     element.style.fontFamily = 'Arial, sans-serif';
+    element.style.color = '#000000'; // Force black text for PDF
+    element.style.backgroundColor = '#ffffff'; // Force white background for PDF
 
     let html = `
       <div style="text-align: center; margin-bottom: 30px;">
@@ -436,9 +438,9 @@ exportPdfBtn.addEventListener('click', async () => {
         <p style="color: #666; margin: 5px 0;">Competition Code: ${data.code}</p>
         <p style="color: #999; font-size: 12px;">Generated on ${new Date().toLocaleString()}</p>
       </div>
-      <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+      <table style="width: 100%; border-collapse: collapse; margin-top: 20px; color: #000000;">
         <thead>
-          <tr style="background-color: #218080; color: white;">
+          <tr style="background-color: #218080; color: #ffffff;">
             <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Rank</th>
             <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Participant Name</th>
             <th style="padding: 12px; text-align: center; border: 1px solid #ddd;">Avg WPM</th>
@@ -452,7 +454,7 @@ exportPdfBtn.addEventListener('click', async () => {
     data.rankings.forEach((item, index) => {
       const rowBg = index % 2 === 0 ? '#f9f9f9' : '#ffffff';
       html += `
-        <tr style="background-color: ${rowBg};">
+        <tr style="background-color: ${rowBg}; color: #000000;">
           <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">${item.rank}</td>
           <td style="padding: 10px; border: 1px solid #ddd;">${item.participantName}</td>
           <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${item.averageWpm}</td>
