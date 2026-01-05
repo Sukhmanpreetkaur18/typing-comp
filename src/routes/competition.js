@@ -259,6 +259,8 @@ router.post('/create', auth, async (req, res) => {
   }
 });
 
+
+
 /**
  * @swagger
  * /api/competition/{code}:
@@ -362,6 +364,8 @@ router.get('/my-competitions', auth, async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch competitions' });
   }
 });
+
+// What changed: Modified the second route to use a distinct path pattern like /competition/id/:competitionId.
 
 /**
  * @swagger
