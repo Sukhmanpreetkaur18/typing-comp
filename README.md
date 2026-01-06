@@ -1,73 +1,11 @@
-<div align="center">
 
-# ⌨️ TECHFEST TYPING ENGINE
-### **Precision. Speed. Zero Latency.**
 
-A high-performance, real-time typing competition orchestrator designed for competitive tech environments. Built to handle intense traffic with sub-millisecond synchronization.
+# README.md
 
-[![Socket.io](https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socket.dot-io&logoColor=white)](https://socket.io/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-[![NodeJS](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![Anti-Cheat](https://img.shields.io/badge/Anti--Cheat-Active-red?style=for-the-badge&logo=securityscorecard&logoColor=white)](#)
+# ⚡ TechFest Typing Competition Platform
 
----
+A **production-ready, full-stack typing competition platform** built with Node.js, Socket.io, MongoDB, and Vanilla JavaScript. Perfect for college techfests, typing competitions, and typing speed challenges with real-time scoring and anti-cheating measures.
 
-[🎮 Live Demo](#) • [🛠️ Architecture](#-system-architecture) • [🚀 Deploy](#-installation) • [🔒 Security](#-anti-cheat-measures)
-
-</div>
-
----
-
-## 🔥 The Core Engine
-
-This isn't just a typing site; it's an **event-driven battleground**. Designed specifically for TechFests, it replaces unreliable manual scoring with a robust, automated pipeline.
-
-### 🏗️ System Architecture
-
-The platform follows a **Real-Time Event-Driven** pattern to ensure every keystroke counts.
-
-```text
-TypingEngine (Core Orchestrator)
-┃
-┣━━ 📡 Real-Time Layer (Socket.io)
-┃   ┣━━ ⚡ Low-Latency Sync ....... [Room-based Scaling]
-┃   ┣━━ ⏱️ NTP Time Sync ........... [Clock Drift Correction]
-┃   ┗━━ 📊 Live Leaderboard ........ [Broadcast Updates]
-┃
-┣━━ 🛡️ Security & Integrity
-┃   ┣━━ 🚫 Anti-Cheat Engine ....... [WPM/Input Anomalies]
-┃   ┣━━ 🔒 JWT Authentication ...... [Identity Security]
-┃   ┗━━ 🚦 Rate Limiter ............ [DDoS Protection]
-┃
-┣━━ 📦 Persistence Layer
-┃   ┣━━ 🍃 MongoDB ................. [Result History]
-┃   ┗━━ 📋 Match Logging ........... [Audit Trails]
-┃
-┗━━ 📊 Observability
-    ┗━━ 📝 Structured Logger ....... [Match Analytics]
-✨ Features That Win
-⚡ Real-time Synchronization: Every competitor sees their opponents' progress in real-time without refreshing.
-
-🛡️ Hardened Anti-Cheat: Intelligent logic to detect copy-pasting, script-injection, and impossible WPM spikes.
-
-📊 Live Dashboards: Large-screen optimized views for event halls, showing the top 10 rankings dynamically.
-
-📱 Ultra-Responsive: Built with Vanilla JS for maximum performance and minimal client-side overhead.
-
-🚀 Quick Deployment
-Bash
-
-# Clone the repository
-git clone [https://github.com/your-username/techfest-typing.git](https://github.com/your-username/techfest-typing.git) && cd techfest-typing
-
-# Configure environment
-echo "PORT=3000\nMONGO_URI=your_uri\nJWT_SECRET=your_secret" > .env
-
-<div align="center">
-
-View Full API Documentation →
-
-</div>
 ## 📖 Documentation Structure
 
 This documentation is organized into modular files for better navigation. See the [docs](./docs/) folder for complete documentation:
