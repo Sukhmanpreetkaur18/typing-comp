@@ -2150,3 +2150,11 @@ body {
 .eye-icon:hover {
   opacity: 1;
 }
+
+.stat-value {
+  transition: transform 0.25s ease;
+}
+
+.stat-card:hover .stat-value {
+  transform: scale(1.15);
+}
