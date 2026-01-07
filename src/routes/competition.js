@@ -4,6 +4,7 @@ const Competition = require('../models/Competition');
 const Participant = require('../models/Participant');
 const generateCode = require('../utils/codeGenerator');
 const auth = require('../middleware/auth');
+const roleMiddleware = require("../middleware/roleMiddleware");
 
 const router = express.Router();
 
