@@ -367,7 +367,32 @@ a {
 a:hover {
   color: var(--color-primary-hover);
 }
+/* light/dark mode button style */
+.theme-toggle {
+  position: fixed;
+  top: var(--space-16);
+  right: var(--space-16);
+  padding: var(--space-8);
+  font-size: var(--font-size-lg);
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--color-btn-bg);
+  color: var(--color-btn-text);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-normal) var(--ease-standard);
+  z-index: 1000;
+}
 
+.theme-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-md);
+}
+
+.theme-toggle:focus-visible {
+  outline: var(--focus-outline);
+  box-shadow: var(--focus-ring);
+}
 code,
 pre {
   font-family: var(--font-family-mono);
