@@ -13,51 +13,38 @@ require('./config/database');
 
 const app = express();
 
-
 // Security headers (including CSP) via Helmet
 app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        // Fallback for any resource type not explicitly listed
         defaultSrc: ["'self'"],
-
-        // Allow scripts from our own origin + specific CDNs we use
         scriptSrc: [
           "'self'",
-          "https://cdn.socket.io",    // Socket.IO client CDN
-          "https://cdn.sheetjs.com",  // SheetJS (xlsx) CDN
-          "https://cdnjs.cloudflare.com", // html2pdf and other libs from cdnjs
-          "https://cdn.jsdelivr.net", // Chart.js CDN
+          "https://cdn.socket.io",
+          "https://cdn.sheetjs.com",
+          "https://cdnjs.cloudflare.com",
+          "https://cdn.jsdelivr.net",
         ],
-
-        // Allow XHR / fetch / WebSocket connections to our backend
         connectSrc: [
           "'self'",
-          "ws://localhost:3000",      // Socket.IO / WS endpoint in dev
-          "http://localhost:3000",    // REST API endpoint in dev
-          "https://cdn.socket.io", // allow Socket.IO source map / any XHR from this CDN
+          "ws://localhost:3000",
+          "http://localhost:3000",
+          "https://cdn.socket.io",
         ],
-
-        // Allow images from same origin and inline data URLs (e.g. base64)
         imgSrc: ["'self'", "data:"],
-
-        // Allow styles from same origin and inline styles (for convenience in this app)
         styleSrc: ["'self'", "'unsafe-inline'"],
-
-        // Block inline JS attributes like onclick="" for better XSS protection
         scriptSrcAttr: ["'none'"],
       },
     },
   }),
 );
 
-
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 
 app.use(limiter);
@@ -83,8 +70,44 @@ app.use('/api', require('./routes/competition'));
 // Static files
 app.use(express.static(path.join(__dirname, './public')));
 
-// Fallback route
-// Fallback route
+// ✅ NEW: Loader middleware for specific pages
+app.use((req, res, next) => {
+  // Skip loader for API routes and static assets
+  if (req.path.startsWith('/api') || 
+      req.path.startsWith('/static') || 
+      req.path.includes('.') ||
+      req.path === '/loader') {
+    return next();
+  }
+  
+  // Check if it's a main page that should show loader
+  const mainPages = ['/', '/participant', '/organizer', '/analytics'];
+  
+  // If user is coming from loader or it's not a main page, skip loader
+  if (req.query.fromLoader || !mainPages.includes(req.path)) {
+    return next();
+  }
+  
+  // Check if user has already seen loader in this session
+  if (req.session && req.session.hasSeenLoader) {
+    return next();
+  }
+  
+  // Redirect to loader with the intended destination
+  const redirectUrl = `${req.path}${Object.keys(req.query).length ? '?' + new URLSearchParams(req.query).toString() : ''}`;
+  res.redirect(`/loader?redirect=${encodeURIComponent(redirectUrl)}`);
+});
+
+// ✅ NEW: Loader route
+app.get('/loader', (req, res) => {
+  // Set session flag to indicate loader has been shown
+  if (req.session) {
+    req.session.hasSeenLoader = true;
+  }
+  res.sendFile(path.join(__dirname, './public/loader.html'));
+});
+
+// Fallback routes with query parameter to skip loader
 app.get('/participant', (req, res) => {
   res.sendFile(path.join(__dirname, './public/participant.html'));
 });
