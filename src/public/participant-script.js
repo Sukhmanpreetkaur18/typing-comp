@@ -171,9 +171,24 @@ function updateTypingStats() {
     ? Math.round((correctChars / totalChars) * 100)
     : 100;
 
+  // Calculate progress percentage
+  const progress = typingText.length > 0
+    ? Math.round((totalChars / typingText.length) * 100)
+    : 0;
+
   wpmDisplay.textContent = wpm;
   accuracyDisplay.textContent = accuracy + '%';
   updateTextDisplay(inputText);
+
+  // Update progress bar
+  const progressFill = document.getElementById('progressFill');
+  const progressPercentage = document.getElementById('progressPercentage');
+  if (progressFill) {
+    progressFill.style.width = progress + '%';
+  }
+  if (progressPercentage) {
+    progressPercentage.textContent = progress + '%';
+  }
 
   socket.emit('progress', {
     competitionId,
