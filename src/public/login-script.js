@@ -55,4 +55,46 @@ const loginForm = document.getElementById('loginForm');
         loginBtn.disabled = false;
         loginBtn.textContent = 'Login';
       }
+
+
     });
+
+// ============= KEYBOARD SHORTCUTS =============
+document.addEventListener('keydown', (e) => {
+  switch (e.key) {
+    case 'Enter':
+      // Submit login form
+      e.preventDefault();
+      loginForm.dispatchEvent(new Event('submit'));
+      break;
+    case 'Escape':
+      // Clear form or go back
+      e.preventDefault();
+      // Add logic to clear form fields if needed
+      document.getElementById('email').value = '';
+      document.getElementById('password').value = '';
+      break;
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const passwordInput = document.getElementById("password");
+  const toggle = document.getElementById("togglePassword");
+
+  if (!passwordInput || !toggle) return;
+
+  toggle.addEventListener("click", () => {
+    const isHidden = passwordInput.type === "password";
+    passwordInput.type = isHidden ? "text" : "password";
+    toggle.textContent = isHidden ? "🙈" : "👁️";
+  });
+});
+document.getElementById("forgotPasswordLink").addEventListener("click", function (e) {
+  e.preventDefault();
+
+  const msg = document.getElementById("forgotMessage");
+  msg.textContent =
+    "Forgot password feature coming soon. Please log in using another email for now.";
+  msg.classList.add("show");
+});
+

@@ -59,7 +59,7 @@ function renderRounds() {
     roundDiv.innerHTML = `
       <div class="round-header">
         <h4>Round ${index + 1}</h4>
-        <button class="btn-remove" onclick="removeRound(${index})">✕</button>
+        <button class="btn-remove">✕</button>
       </div>
       <div class="form-group">
         <label>Text to Type</label>
@@ -73,12 +73,23 @@ function renderRounds() {
     `;
     roundsList.appendChild(roundDiv);
 
-    // Character counter
+    // Delete-Round button listener
+    const deleteBtn = roundDiv.querySelector('.btn-remove');
+    deleteBtn.addEventListener('click', () => removeRound(index));
+
+    // Persist text input into state
     const textarea = document.getElementById(`text-${index}`);
-    textarea.addEventListener('input', function() {
+    textarea.addEventListener('input', function () {
+      rounds[index].text = this.value;
+      // Character counter
       document.getElementById(`count-${index}`).textContent = this.value.length;
     });
-    document.getElementById(`count-${index}`).textContent = round.text.length;
+
+    // Persist duration input into state
+    const durationInput = document.getElementById(`duration-${index}`);
+    durationInput.addEventListener('input', function () {
+      rounds[index].duration = Number(this.value);
+    });
   });
 }
 
@@ -92,7 +103,17 @@ function removeRound(index) {
 createCompBtn.addEventListener('click', async () => {
   const compName = compNameInput.value.trim();
   const compDescription = compDescriptionInput.value.trim();
-  
+ const maxPlayersInput = document.getElementById("maxPlayers");
+const maxPlayers = maxPlayersInput && maxPlayersInput.value
+  ? parseInt(maxPlayersInput.value, 10)
+  : null;
+
+  if (maxPlayers !== null && (isNaN(maxPlayers) || maxPlayers < 1)) {
+  alert("Maximum players must be a number greater than 0");
+  return;
+}
+
+
   if (!compName) {
     alert('Please enter competition name');
     return;
@@ -118,11 +139,13 @@ createCompBtn.addEventListener('click', async () => {
     const response = await fetch('/api/create', {
       method: 'POST',
       headers: getAuthHeaders(),
-      body: JSON.stringify({ 
-        name: compName, 
-        description: compDescription,
-        rounds 
-      })
+    body: JSON.stringify({
+  name: compName,
+  description: compDescription,
+  rounds,
+  maxPlayers // 👈 ADD THIS
+})
+
     });
 
     const data = await response.json();
@@ -143,11 +166,11 @@ createCompBtn.addEventListener('click', async () => {
       document.getElementById('setupForm').classList.add('hidden');
       codeDisplay.classList.remove('hidden');
       codeDisplay.classList.add('show');
-      
+
       // Show control panel elements
       roundSelector.classList.remove('hidden');
       compInfo.classList.remove('hidden');
-      
+
       compNameDisplay.textContent = compName;
       statusDisplay.textContent = 'Ready';
 
@@ -164,6 +187,52 @@ createCompBtn.addEventListener('click', async () => {
   } catch (error) {
     console.error('Error:', error);
     alert('Connection error');
+  }
+});
+
+// ============= KEYBOARD SHORTCUTS =============
+document.addEventListener('keydown', (e) => {
+  switch (e.key) {
+    case 'Enter':
+      // Submit form or create competition
+      if (document.getElementById('setupForm') && !document.getElementById('setupForm').classList.contains('hidden')) {
+        e.preventDefault();
+        createCompBtn.click();
+      }
+      break;
+    case 'Tab':
+      // Switch to participant role
+      e.preventDefault();
+      window.location.href = "/participant.html";
+      break;
+    case 'Escape':
+      // Close modals or go back
+      e.preventDefault();
+      // Add logic to close any open modals or go back
+      break;
+    case 'ArrowUp':
+    case 'ArrowDown':
+      // Navigate rounds or options
+      e.preventDefault();
+      const roundButtons = document.querySelectorAll('.round-btn:not(.completed)');
+      if (roundButtons.length > 0) {
+        const currentIndex = Array.from(roundButtons).findIndex(btn => btn.classList.contains('active'));
+        let nextIndex;
+        if (e.key === 'ArrowDown') {
+          nextIndex = (currentIndex + 1) % roundButtons.length;
+        } else {
+          nextIndex = currentIndex === 0 ? roundButtons.length - 1 : currentIndex - 1;
+        }
+        roundButtons[nextIndex].click();
+      }
+      break;
+    case ' ':
+      // Start round
+      if (startRoundBtn && !startRoundBtn.disabled) {
+        e.preventDefault();
+        startRoundBtn.click();
+      }
+      break;
   }
 });
 

@@ -24,8 +24,19 @@ registerForm.addEventListener('submit', async (e) => {
     return;
   }
 
-  if (password.length < 6) {
-    showError('Password must be at least 6 characters');
+  if (password.length < 12) {
+    showError('Password must be at least 12 characters');
+    return;
+  }
+
+  // Check for password complexity
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasNumbers = /\d/.test(password);
+  const hasSpecialChars = /[@$!%*?&]/.test(password);
+
+  if (!hasLowerCase || !hasUpperCase || !hasNumbers || !hasSpecialChars) {
+    showError('Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character (@$!%*?&)');
     return;
   }
 
@@ -61,4 +72,17 @@ registerForm.addEventListener('submit', async (e) => {
     registerBtn.disabled = false;
     registerBtn.textContent = 'Create Account';
   }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const passwordInput = document.getElementById("password");
+  const toggle = document.getElementById("togglePassword");
+
+  if (!passwordInput || !toggle) return;
+
+  toggle.addEventListener("click", () => {
+    const isHidden = passwordInput.type === "password";
+    passwordInput.type = isHidden ? "text" : "password";
+    toggle.textContent = isHidden ? "🙈" : "👁️";
+  });
 });

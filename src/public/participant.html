@@ -1,17 +1,52 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TechFest Typing - Participant</title>
     <link rel="stylesheet" href="styles.css" />
+    <style>
+        /* Scroll to Top Button for Participant Page */
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--color-primary);
+            color: var(--color-btn-primary-text);
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: var(--color-primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        #scrollToTopBtn:active {
+            transform: translateY(-1px);
+        }
+    </style>
   </head>
 
   <body class="dark-theme">
     <div class="container">
       <header class="header">
         <h1>⚡ TechFest Typing Battle</h1>
-        <span class="role-badge">PARTICIPANT</span>
+        <div class="role-switch">
+          <button class="role-btn active">Participant</button>
+          <button class="role-btn" id="organizerSwitchBtn">Organizer</button>
+        </div>
       </header>
 
       <!-- JOIN SCREEN -->
@@ -84,6 +119,16 @@
           <div class="stat-box">
             <span class="stat-label">Time</span>
             <span class="stat-value" id="timerDisplay">0s</span>
+          </div>
+        </div>
+
+        <!-- PROGRESS BAR -->
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-text">
+            <span id="progressPercentage">0%</span> Complete
           </div>
         </div>
 
@@ -175,7 +220,37 @@
       </section>
     </div>
 
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTopBtn" title="Go to top">↑</button>
+
     <script src="https://cdn.socket.io/4.5.4/socket.io.js"></script>
     <script src="participant-script.js"></script>
+    
+    <script>
+        // Scroll to Top Button Functionality
+        const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+        const rootElement = document.documentElement;
+
+        function handleScroll() {
+            const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+            if (rootElement.scrollTop / scrollTotal > 0.1) {
+                scrollToTopBtn.style.display = "flex";
+            } else {
+                scrollToTopBtn.style.display = "none";
+            }
+        }
+
+        function scrollToTop() {
+            rootElement.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+        if (scrollToTopBtn) {
+            document.addEventListener("scroll", handleScroll);
+            scrollToTopBtn.addEventListener("click", scrollToTop);
+        }
+    </script>
   </body>
 </html>
