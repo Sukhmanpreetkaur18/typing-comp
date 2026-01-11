@@ -6,6 +6,7 @@ const generateCode = require('../utils/codeGenerator');
 const auth = require('../middleware/auth');
 const roleMiddleware = require("../middleware/roleMiddleware");
 const AppError = require('../utils/appError');
+const logger = require('../config/logger');
 const catchAsync = require('../utils/catchAsync');
 const router = express.Router();
 
