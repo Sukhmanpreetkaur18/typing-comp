@@ -462,10 +462,64 @@ socket.on('roundEnded', (data) => {
     if (personalResult.keyStats) {
       renderHeatmap(personalResult.keyStats);
     }
+
+    // Hide EVERYTHING else (Results Card & History) as per user request
+    const resultsCard = document.querySelector('.results-card');
+    if (resultsCard) resultsCard.classList.add('hidden');
+
+    const historySection = document.querySelector('.history-section');
+    if (historySection) historySection.classList.add('hidden');
+
+    // Add 'Join New Competition' button directly to Heatmap Container
+    const heatmapContainer = document.getElementById('heatmapContainer');
+    if (heatmapContainer && !document.getElementById('resScreenJoinBtn')) {
+      const joinBtn = document.createElement('button');
+      joinBtn.id = 'resScreenJoinBtn';
+      joinBtn.className = 'btn-primary';
+      joinBtn.textContent = 'Join New Competition';
+      joinBtn.style.marginTop = '30px';
+      joinBtn.style.display = 'block';
+      joinBtn.style.marginLeft = 'auto';
+      joinBtn.style.marginRight = 'auto';
+      joinBtn.onclick = () => window.location.href = '/participant';
+
+      heatmapContainer.appendChild(joinBtn);
+    }
+
+    // Center the heatmap on screen
+    resultsScreen.style.display = 'flex';
+    resultsScreen.style.justifyContent = 'center';
+    resultsScreen.style.alignItems = 'center';
+    resultsScreen.style.minHeight = '100vh';
   }
 });
 
 socket.on('finalResults', () => {
+  // If we are currently viewing results (heatmap), stay there but update UI
+  if (!resultsScreen.classList.contains('hidden')) {
+    const title = resultsScreen.querySelector('h2');
+    if (title) title.textContent = "Competition Complete! 🎉";
+
+    // Hide "Waiting for next round..." text
+    const nextRoundText = document.getElementById('nextRoundText');
+    if (nextRoundText) nextRoundText.style.display = 'none';
+
+    // Add 'Join New Competition' button if not present
+    if (!document.getElementById('resScreenJoinBtn')) {
+      const joinBtn = document.createElement('button');
+      joinBtn.id = 'resScreenJoinBtn';
+      joinBtn.className = 'btn-primary';
+      joinBtn.textContent = 'Join New Competition';
+      joinBtn.style.marginTop = '20px';
+      joinBtn.onclick = () => window.location.href = '/participant';
+
+      const card = resultsScreen.querySelector('.results-card');
+      if (card) card.appendChild(joinBtn);
+    }
+    return;
+  }
+
+  // Default behavior
   joinScreen.classList.add('hidden');
   lobbyScreen.classList.add('hidden');
   testScreen.classList.add('hidden');
@@ -526,14 +580,14 @@ function renderHeatmap(keyStats) {
 
   let latencies = keys.map(k => keyStats[k].totalLatency / keyStats[k].count);
   latencies = latencies.filter(l => !isNaN(l) && l > 0);
-  
+
   const avgLatency = latencies.reduce((a, b) => a + b, 0) / latencies.length || 0;
 
   // Keyboard Layout
   const rows = [
-    ['Q','W','E','R','T','Y','U','I','O','P'],
-    ['A','S','D','F','G','H','J','K','L'],
-    ['Z','X','C','V','B','N','M']
+    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+    ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
   ];
 
   let html = `
@@ -551,7 +605,7 @@ function renderHeatmap(keyStats) {
     row.forEach(char => {
       const stats = keyStats[char] || { count: 0, totalLatency: 0, errors: 0 };
       const latency = stats.count > 0 ? Math.round(stats.totalLatency / stats.count) : 0;
-      
+
       let colorClass = 'key-unused';
       if (stats.count > 0) {
         if (latency < avgLatency * 0.8) colorClass = 'key-fast';
