@@ -106,6 +106,7 @@ async function handleEndRound(
       incorrectChars: p.currentRoundData.incorrectChars || 0,
       errors: p.currentRoundData.errors || 0,
       backspaces: p.currentRoundData.backspaces || 0,
+      keyStats: p.currentRoundData.keyStats || {},
       typingTime: Math.round(p.currentRoundData.elapsedSeconds) || 0,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -168,6 +169,7 @@ async function handleEndRound(
           rank: roundScore.rank,
           errors: roundScore.errors || 0,
           backspaces: roundScore.backspaces || 0,
+          keyStats: roundScore.keyStats || {},
         });
         if (!p.roundScores) p.roundScores = [];
         p.roundScores.push({
@@ -177,6 +179,7 @@ async function handleEndRound(
           rank: roundScore.rank,
           errors: roundScore.errors || 0,
           backspaces: roundScore.backspaces || 0,
+          keyStats: roundScore.keyStats || {},
         });
       }
     });
@@ -190,6 +193,7 @@ async function handleEndRound(
         accuracy: r.accuracy,
         errors: r.errors || 0,
         backspaces: r.backspaces || 0,
+        keyStats: r.keyStats || {},
         rank: r.rank,
       }));
 
@@ -277,7 +281,7 @@ async function handleShowFinalResults(
       })),
     });
 
-    // PERF FIX: Use bulkWrite instead of loop
+    // FIX: Update Participant model instead of Competition
     if (finalRankings.length > 0) {
       const bulkOps = finalRankings.map(ranking => ({
         updateOne: {

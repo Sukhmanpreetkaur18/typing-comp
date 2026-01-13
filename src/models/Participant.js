@@ -57,6 +57,13 @@ const ParticipantSchema = new mongoose.Schema({
       rank: { type: Number },
       errors: { type: Number, default: 0 },
       backspaces: { type: Number, default: 0 },
+      keyStats: {
+        type: Map, of: new mongoose.Schema({
+          count: { type: Number, default: 0 },
+          errors: { type: Number, default: 0 },
+          totalLatency: { type: Number, default: 0 } // In milliseconds
+        }, { _id: false })
+      }
     },
   ],
 });
