@@ -50,7 +50,7 @@ let selectedRound = null;
 // Add new round
 addRoundBtn.addEventListener('click', () => {
   const roundIndex = rounds.length;
-  rounds.push({ text: '', duration: 60 });
+  rounds.push({ text: '', language: 'en', duration: 60 });
   renderRounds();
 });
 
@@ -64,7 +64,24 @@ function renderRounds() {
     roundDiv.innerHTML = `
       <div class="round-header">
         <h4>Round ${index + 1}</h4>
-        <button class="btn-remove" onclick="removeRound(${index})">✕</button>
+        <button class="btn-remove">✕</button>
+      </div>
+      <div class="form-group">
+        <label>Language</label>
+        <select id="language-${index}" class="round-language">
+          <option value="en" ${round.language === 'en' ? 'selected' : ''}>English</option>
+          <option value="es" ${round.language === 'es' ? 'selected' : ''}>Spanish</option>
+          <option value="fr" ${round.language === 'fr' ? 'selected' : ''}>French</option>
+          <option value="de" ${round.language === 'de' ? 'selected' : ''}>German</option>
+          <option value="it" ${round.language === 'it' ? 'selected' : ''}>Italian</option>
+          <option value="pt" ${round.language === 'pt' ? 'selected' : ''}>Portuguese</option>
+          <option value="ru" ${round.language === 'ru' ? 'selected' : ''}>Russian</option>
+          <option value="ar" ${round.language === 'ar' ? 'selected' : ''}>Arabic</option>
+          <option value="hi" ${round.language === 'hi' ? 'selected' : ''}>Hindi</option>
+          <option value="zh" ${round.language === 'zh' ? 'selected' : ''}>Chinese</option>
+          <option value="ja" ${round.language === 'ja' ? 'selected' : ''}>Japanese</option>
+          <option value="ko" ${round.language === 'ko' ? 'selected' : ''}>Korean</option>
+        </select>
       </div>
       <div class="form-group">
         <label>Text to Type</label>
@@ -78,12 +95,23 @@ function renderRounds() {
     `;
     roundsList.appendChild(roundDiv);
 
-    // Character counter
+    // Delete-Round button listener
+    const deleteBtn = roundDiv.querySelector('.btn-remove');
+    deleteBtn.addEventListener('click', () => removeRound(index));
+
+    // Persist text input into state
     const textarea = document.getElementById(`text-${index}`);
-    textarea.addEventListener('input', function() {
+    textarea.addEventListener('input', function () {
+      rounds[index].text = this.value;
+      // Character counter
       document.getElementById(`count-${index}`).textContent = this.value.length;
     });
-    document.getElementById(`count-${index}`).textContent = round.text.length;
+
+    // Persist duration input into state
+    const durationInput = document.getElementById(`duration-${index}`);
+    durationInput.addEventListener('input', function () {
+      rounds[index].duration = Number(this.value);
+    });
   });
 }
 
@@ -97,9 +125,19 @@ function removeRound(index) {
 createCompBtn.addEventListener('click', async () => {
   const compName = compNameInput.value.trim();
   const compDescription = compDescriptionInput.value.trim();
-  
-  if (!compName) {
-    alert('Please enter competition name');
+ const maxPlayersInput = document.getElementById("maxPlayers");
+const maxPlayers = maxPlayersInput && maxPlayersInput.value
+  ? parseInt(maxPlayersInput.value, 10)
+  : null;
+
+  if (maxPlayers !== null && (isNaN(maxPlayers) || maxPlayers < 1)) {
+  alert("Maximum players must be a number greater than 0");
+  return;
+}
+
+
+  if (compName.length < 3) {
+    alert('Please enter competition name with at least 3 characters');
     return;
   }
 
@@ -111,11 +149,12 @@ createCompBtn.addEventListener('click', async () => {
   // Collect updated rounds
   rounds = rounds.map((round, index) => ({
     text: document.getElementById(`text-${index}`).value.trim(),
+    language: document.getElementById(`language-${index}`).value,
     duration: parseInt(document.getElementById(`duration-${index}`).value)
   }));
 
-  if (rounds.some(r => !r.text || r.duration < 10)) {
-    alert('All rounds must have text and duration >= 10s');
+  if (rounds.some(r => r.text.length < 10 || !(30 <= r.duration && r.duration <= 600))) {
+    alert('All rounds must have text minimum of 10 characters and duration between 30 and 600 seconds');
     return;
   }
 
@@ -123,11 +162,13 @@ createCompBtn.addEventListener('click', async () => {
     const response = await fetch('/api/create', {
       method: 'POST',
       headers: getAuthHeaders(),
-      body: JSON.stringify({ 
-        name: compName, 
-        description: compDescription,
-        rounds 
-      })
+    body: JSON.stringify({
+  name: compName,
+  description: compDescription,
+  rounds,
+  maxPlayers // 👈 ADD THIS
+})
+
     });
 
     const data = await response.json();
@@ -148,11 +189,11 @@ createCompBtn.addEventListener('click', async () => {
       document.getElementById('setupForm').classList.add('hidden');
       codeDisplay.classList.remove('hidden');
       codeDisplay.classList.add('show');
-      
+
       // Show control panel elements
       roundSelector.classList.remove('hidden');
       compInfo.classList.remove('hidden');
-      
+
       compNameDisplay.textContent = compName;
       statusDisplay.textContent = 'Ready';
 
@@ -171,6 +212,52 @@ createCompBtn.addEventListener('click', async () => {
   } catch (error) {
     console.error('Error:', error);
     alert('Connection error');
+  }
+});
+
+// ============= KEYBOARD SHORTCUTS =============
+document.addEventListener('keydown', (e) => {
+  switch (e.key) {
+    case 'Enter':
+      // Submit form or create competition
+      if (document.getElementById('setupForm') && !document.getElementById('setupForm').classList.contains('hidden')) {
+        e.preventDefault();
+        createCompBtn.click();
+      }
+      break;
+    case 'Tab':
+      // Switch to participant role
+      e.preventDefault();
+      window.location.href = "/participant.html";
+      break;
+    case 'Escape':
+      // Close modals or go back
+      e.preventDefault();
+      // Add logic to close any open modals or go back
+      break;
+    case 'ArrowUp':
+    case 'ArrowDown':
+      // Navigate rounds or options
+      e.preventDefault();
+      const roundButtons = document.querySelectorAll('.round-btn:not(.completed)');
+      if (roundButtons.length > 0) {
+        const currentIndex = Array.from(roundButtons).findIndex(btn => btn.classList.contains('active'));
+        let nextIndex;
+        if (e.key === 'ArrowDown') {
+          nextIndex = (currentIndex + 1) % roundButtons.length;
+        } else {
+          nextIndex = currentIndex === 0 ? roundButtons.length - 1 : currentIndex - 1;
+        }
+        roundButtons[nextIndex].click();
+      }
+      break;
+    case ' ':
+      // Start round
+      if (startRoundBtn && !startRoundBtn.disabled) {
+        e.preventDefault();
+        startRoundBtn.click();
+      }
+      break;
   }
 });
 
@@ -250,7 +337,7 @@ function showRoundStatus(roundIndex) {
     document.getElementById('roundTimer').textContent = timeLeft;
     
     const progress = ((duration - timeLeft) / duration) * 100;
-    document.getElementById('progressFill').style.width = progress + '%';
+    document.getElementById('progressFill').style.transform = `scaleX(${progress / 100})`;
 
     if (timeLeft <= 0) {
       clearInterval(timerInterval);

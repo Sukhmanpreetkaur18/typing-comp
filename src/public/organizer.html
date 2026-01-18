@@ -1,20 +1,64 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TechFest Typing - Organizer</title>
     <link rel="stylesheet" href="styles.css" />
+    <style>
+        /* Scroll to Top Button for Organizer Page */
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--color-primary);
+            color: var(--color-btn-primary-text);
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: var(--color-primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        #scrollToTopBtn:active {
+            transform: translateY(-1px);
+        }
+    </style>
   </head>
   <body class="dark-theme">
     <div class="container">
       <!-- HEADER -->
-      <header class="header">
+      <header class="header organizer-header">
         <h1>⚡ TechFest Typing Battle</h1>
-        <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px">
           <span class="role-badge">ORGANIZER</span>
-          <span id="organizerName" style="color: var(--color-text-secondary); font-size: var(--font-size-sm);"></span>
-          <button id="logoutBtn" class="btn-secondary" style="padding: 6px 12px; font-size: var(--font-size-sm);">Logout</button>
+          <span
+            id="organizerName"
+            style="
+              color: var(--color-text-secondary);
+              font-size: var(--font-size-sm);
+            "
+          ></span>
+          <button
+            id="logoutBtn"
+            class="btn-secondary"
+            style="padding: 6px 12px; font-size: var(--font-size-sm)"
+          >
+            Logout
+          </button>
         </div>
       </header>
 
@@ -23,6 +67,9 @@
         <!-- LEFT: Setup Section -->
         <section class="section setup-section" id="setupSection">
           <h2>📝 Create Competition</h2>
+          <p class="section-subtitle">
+            Set up your competition and rounds
+          </p>
 
           <!-- FORM CONTAINER (will be hidden after creation) -->
           <div id="setupForm" class="setup-form">
@@ -43,6 +90,18 @@
                 id="compDescription"
                 placeholder="e.g., College typing speed contest"
               />
+            </div>
+            <div class="form-group">
+              <label for="maxPlayers">Maximum Players</label>
+              <input
+                type="number"
+                id="maxPlayers"
+                min="1"
+                placeholder="e.g., 50"
+              />
+              <small class="helper-text">
+                Leave empty for unlimited participants
+              </small>
             </div>
 
             <!-- ROUNDS SECTION -->
@@ -78,7 +137,9 @@
         <!-- RIGHT: Control & Leaderboard Section -->
         <section class="section control-section">
           <h2>👥 Control Panel</h2>
-
+          <p class="section-subtitle">
+            Manage rounds, analytics, and results
+          </p>
           <!-- COMPETITION INFO -->
           <div id="compInfo" class="comp-info hidden">
             <div class="info-box">
@@ -106,6 +167,17 @@
                 📄 PDF
               </button>
             </div>
+          </div>
+
+          <!-- ANALYTICS SECTION -->
+          <div id="analyticsSection" class="analytics-section" style="margin-top: 20px;">
+            <h3>📊 Analytics Dashboard</h3>
+            <p style="color: var(--color-text-secondary); font-size: var(--font-size-sm); margin-bottom: 10px;">
+              View detailed insights about your competitions
+            </p>
+            <a href="analytics.html" class="btn-primary" style="text-decoration: none; display: inline-block; width: 100%; text-align: center;">
+              View Analytics
+            </a>
           </div>
 
           <!-- ROUND SELECTOR -->
@@ -148,16 +220,48 @@
           <div class="leaderboard-section">
             <h3>📊 Live Leaderboard</h3>
             <div id="leaderboardContainer" class="leaderboard-container">
-              <p class="placeholder-text">Awaiting round start...</p>
+              <p class="placeholder-text muted">
+                ⏳ No active round yet. Start a round to see live rankings.
+              </p>
             </div>
           </div>
         </section>
       </main>
     </div>
 
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTopBtn" title="Go to top">↑</button>
+
     <script src="https://cdn.socket.io/4.5.4/socket.io.js"></script>
     <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="organizer-script.js"></script>
+    
+    <script>
+        // Scroll to Top Button Functionality
+        const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+        const rootElement = document.documentElement;
+
+        function handleScroll() {
+            const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+            if (rootElement.scrollTop / scrollTotal > 0.1) {
+                scrollToTopBtn.style.display = "flex";
+            } else {
+                scrollToTopBtn.style.display = "none";
+            }
+        }
+
+        function scrollToTop() {
+            rootElement.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+        if (scrollToTopBtn) {
+            document.addEventListener("scroll", handleScroll);
+            scrollToTopBtn.addEventListener("click", scrollToTop);
+        }
+    </script>
   </body>
 </html>
