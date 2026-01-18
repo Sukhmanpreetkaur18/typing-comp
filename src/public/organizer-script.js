@@ -330,7 +330,7 @@ function showRoundStatus(roundIndex) {
     document.getElementById('roundTimer').textContent = timeLeft;
     
     const progress = ((duration - timeLeft) / duration) * 100;
-    document.getElementById('progressFill').style.width = progress + '%';
+    document.getElementById('progressFill').style.transform = `scaleX(${progress / 100})`;
 
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
