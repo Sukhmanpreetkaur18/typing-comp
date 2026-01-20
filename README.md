@@ -388,3 +388,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Last Updated**: January 9, 2026  
 **Version**: 1.0.0
+
+
+## 🤝 Contributing
+
+Contributions are welcome!  
+Feel free to fork the repository, create a new branch, and submit a pull request.
+
+---
+
+## 🌱 Beginner Friendly
+
+This project is beginner-friendly and welcomes first-time open-source contributors.
+Feel free to explore the codebase, improve documentation, and submit pull requests.
