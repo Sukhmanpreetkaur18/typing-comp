@@ -389,11 +389,22 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Last Updated**: January 9, 2026  
 **Version**: 1.0.0
 
+---
 
-## 🤝 Contributing
+## Contributing
 
-Contributions are welcome!  
-Feel free to fork the repository, create a new branch, and submit a pull request.
+Contributions are welcome and appreciated! 🎉  
+
+If you'd like to contribute, please follow these steps:
+
+1. Fork the repository  
+2. Create a new branch (`git checkout -b feature/your-feature-name`)  
+3. Make your changes  
+4. Commit your changes (`git commit -m "Add: brief description"`)  
+5. Push to your branch (`git push origin feature/your-feature-name`)  
+6. Open a Pull Request  
+
+Please ensure your code follows the existing style and includes relevant documentation or comments where necessary.
 
 ---
 
