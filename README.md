@@ -402,7 +402,7 @@ If you'd like to contribute, please follow these steps:
 3. Make your changes  
 4. Commit your changes (`git commit -m "Add: brief description"`)  
 5. Push to your branch (`git push origin feature/your-feature-name`)  
-6. Open a Pull Request  
+6. Open a Pull Request
 
 Please ensure your code follows the existing style and includes relevant documentation or comments where necessary.
 
